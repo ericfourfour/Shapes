@@ -48,7 +48,7 @@ class Vector(object):
 
         # Floating point error will confuse the trig functions occasionally.
         except ValueError:
-            return 0 if temp > 0 else pi
+            return 0 if temp > 0 else math.pi
 
         # It doesn't make sense to find the angle of a null vector. 
         except ZeroDivisionError:
@@ -297,9 +297,9 @@ if __name__ == "__main__":
         pass
     # }}}1
 
-    print "Testing vector.py..."
+    print("Testing vector.py...")
 
     factory_tests()
 
-    print "All tests passed."
-    print "However, there are not many tests for this module.  Use with caution."
+    print("All tests passed.")
+    print("However, there are not many tests for this module.  Use with caution.")

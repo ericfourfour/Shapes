@@ -3,17 +3,16 @@ geometric shapes.  Any line, polygon, or circle can be represented.  Simple
 points can be represented using vectors, so they are not considered in this
 module.
 
-The classes in this module are designed to be used with Pygame.  For this
-reason, most of the classes have a Pygame attribute that can be directly used
-to draw shapes.  In addition, the vertical axis is assumed to increase going
-down the screen.  This only matters for functions that explicitly refer to the
-"top" or the "bottom" of particular shapes.
+The vertical axis is assumed to increase going down the screen.  This only
+matters for functions that explicitly refer to the "top" or the "bottom" of
+particular shapes.
 
 All of the shape classes are immutable and are not meant to be subclassed. """
 
 from __future__ import division
 
-from vector import *
+import math
+from .vector import Vector, NullVectorError
 
 class Line(object):
     """ Represents a line in two-dimensions.  These lines don't have to be
@@ -98,10 +97,6 @@ class Line(object):
     def direction(self):
         return self.head - self.tail
 
-    @property
-    def pygame(self):
-        return (self.tail, self.head)
-
     def get_head(self): return self.head
     def get_tail(self): return self.tail
     def get_degenerate(self): return self.degenerate
@@ -113,7 +108,6 @@ class Line(object):
     def get_points(self): return self.points
     def get_direction(self): return self.direction
 
-    def get_pygame(self): return self.pygame
     # }}}1
 
 class Circle(object):
@@ -163,10 +157,6 @@ class Circle(object):
     def dimensions(self):
         return self.center, self.radius
 
-    @property
-    def pygame(self):
-        return self.center, self.radius
-
     def get_center(self):
         return self.center
 
@@ -179,8 +169,6 @@ class Circle(object):
     def get_dimensions(self):
         return self.dimensions
 
-    def get_pygame(self):
-        return self.pygame
     # }}}1
 
 class Shape(object):
@@ -199,16 +187,11 @@ class Shape(object):
     @property
     def box(self): raise NotImplementedError
 
-    @property
-    def pygame(self): raise NotImplementedError
-
     def get_edges(self): return self.edges
     def get_vertices(self): return self.vertices
 
     def get_center(self): return self.center
     def get_box(self): return self.box
-
-    def get_pygame(self): return self.pygame
 
     # Setup Methods {{{1
     @staticmethod
@@ -284,7 +267,7 @@ class Polygon(Shape):
         vertices = []
 
         for index in range(sides):
-            normal = Vector.from_radians(2 * pi * index / sides + angle)
+            normal = Vector.from_radians(2 * math.pi * index / sides + angle)
             vertex = center + radius * normal
             vertices.append(vertex)
 
@@ -314,10 +297,6 @@ class Polygon(Shape):
     @property
     def center(self):
         return self.__center
-
-    @property
-    def pygame(self):
-        return [vertex.pygame for vertex in self.vertices]
     # }}}1
 
 class Hexagon(Shape):
@@ -510,10 +489,6 @@ class Rectangle(Shape):
     def box(self):
         return self
 
-    @property
-    def pygame(self):
-        import pygame
-        return pygame.Rect(self.left, self.top, self.width, self.height)
 
     def get_top(self): return self.top
     def get_bottom(self): return self.bottom
@@ -540,18 +515,12 @@ class Rectangle(Shape):
     # }}}1
 
 if __name__ == "__main__":
-    import pygame
-    from pygame.locals import *
-
-    from pprint import *
-
     # Line Tests {{{1
     def line_tests():
         head = Vector(10, 0); tail = Vector(0, 0)
         normal = Vector(0, 1); opposite = Vector(0, -1)
 
         direction = Vector(10, 0)
-        different = Vector(5, 5)
 
         line = Line.from_points(head, tail, normal)
 
@@ -565,8 +534,6 @@ if __name__ == "__main__":
         assert line.get_center() == Vector(5, 0)
         assert line.get_points() == (head, tail)
         assert line.get_direction() == Vector(10, 0)
-
-        assert line.get_pygame() == (tail, head)
 
         same_line = Line.from_direction(tail, direction, normal)
         opposite_line = Line.from_points(head, tail, opposite)
@@ -589,7 +556,6 @@ if __name__ == "__main__":
         assert circle.get_radius() == radius
 
         assert circle.get_dimensions() == (center, radius)
-        assert circle.get_pygame() == (center, radius)
 
         grown_circle = Circle(center, radius - 1).grow(1)
         shrunk_circle = Circle(center, radius + 1).shrink(1)
@@ -635,7 +601,6 @@ if __name__ == "__main__":
             assert edge in polygon.edges
         for vertex in vertices:
             assert vertex in polygon.vertices
-            assert vertex.pygame in polygon.pygame
 
     # Rectangle Tests {{{1
     def rectangle_tests():
@@ -658,7 +623,6 @@ if __name__ == "__main__":
 
         assert golden.size == (width, height)
         assert golden.dimensions == (top, left, width, height)
-        assert golden.pygame == Rect(left, top, width, height)
 
         assert golden.center == center
         assert golden.box == golden
@@ -685,12 +649,12 @@ if __name__ == "__main__":
 
     # }}}1
 
-    print "Testing shapes.py..."
+    print("Testing shapes.py...")
 
     line_tests()
     circle_tests()
     polygon_tests()
     rectangle_tests()
 
-    print "All tests passed."
+    print("All tests passed.")
 
