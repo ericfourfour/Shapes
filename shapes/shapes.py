@@ -12,7 +12,7 @@ All of the shape classes are immutable and are not meant to be subclassed. """
 from __future__ import division
 
 import math
-from vector import Vector, NullVectorError
+from .vector import Vector, NullVectorError
 
 class Line(object):
     """ Represents a line in two-dimensions.  These lines don't have to be

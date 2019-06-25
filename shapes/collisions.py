@@ -1,7 +1,8 @@
 from __future__ import division
 
-import math, shapes
-from vector import Vector
+import math
+import shapes
+from .vector import Vector
 
 class Collisions:
 
