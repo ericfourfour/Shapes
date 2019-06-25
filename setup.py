@@ -2,7 +2,7 @@ from distutils.core import setup
 
 arguments = dict(
         name = "Shapes",
-        version = "1.0.0.0",
+        version = "1.0.1.0",
         description = "2D Game Utilities",
 
         author = "Kale Kundert",
