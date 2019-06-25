@@ -1,8 +1,10 @@
 from distutils.core import setup
 
+from shapes import VERSION
+
 arguments = dict(
         name = "Shapes",
-        version = "1.0.1.0",
+        version = VERSION,
         description = "2D Game Utilities",
 
         author = "Kale Kundert",

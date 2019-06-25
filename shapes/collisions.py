@@ -250,7 +250,7 @@ class Collisions:
     # }}}1
 
 if __name__ == "__main__":
-    from shapes import *
+    from shapes import * # pylint: disable=unused-wildcard-import
 
     # Points and Lines {{{1
     def points_and_lines():
@@ -308,7 +308,7 @@ if __name__ == "__main__":
                 assert points_nearby(point, origin, 5) == near_point[y][x]
 
         except AssertionError:
-            print "An assertion failed at %s." % point; print
+            print("An assertion failed at %s." % point)
             raise
 
     # Points and Shapes {{{1
@@ -465,7 +465,7 @@ if __name__ == "__main__":
                         == touching_point[left][right]
 
             except AssertionError:
-                print "\nAssertion at L:%d R:%d failed.\n" % (left, right)
+                print("\nAssertion at L:%d R:%d failed.\n" % (left, right))
                 raise
 
         # Test degenerate lines.
@@ -563,7 +563,7 @@ if __name__ == "__main__":
                     touching_zero[y][x]
     # }}}1
 
-    print "Testing collisions.py..."
+    print("Testing collisions.py...")
 
     points_and_lines()
     points_and_shapes()
@@ -571,4 +571,4 @@ if __name__ == "__main__":
     lines_and_shapes()
     shapes_and_circles()
 
-    print "All tests passed."
+    print("All tests passed.")
